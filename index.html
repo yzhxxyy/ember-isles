@@ -208,6 +208,8 @@
   .ovbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap;
     position:sticky;bottom:-2px;z-index:2;padding:9px 0 2px;background:transparent;pointer-events:none}
   #ovOrient{display:none}
+  #ovForce{display:none}
+  #forceBtn{display:none}
   .ovbtns button{font-size:12px;padding:8px 16px;pointer-events:auto}
   .ovbtns #ovBtn{font-size:13px;padding:9px 22px;color:#1a1208;border-color:#ffb066;
     background:linear-gradient(180deg,#ffd166,#ff9c4a);border-radius:9px}
@@ -440,7 +442,7 @@
     .invclose{position:fixed;left:12px;right:12px;bottom:calc(8px + env(safe-area-inset-bottom));
       z-index:90;width:auto;margin:0;padding:10px;background:#1a1424;border-color:#4a3f70;border-radius:9px}
     .gameoverlay.show .ovbtns{position:fixed;left:12px;right:12px;
-      bottom:calc(8px + env(safe-area-inset-bottom));z-index:90;display:flex;gap:8px;
+      bottom:calc(8px + env(safe-area-inset-bottom));z-index:90;display:flex;gap:8px;flex-wrap:wrap;
       justify-content:stretch;margin:0;padding:8px;border-radius:10px;
       background:rgba(10,8,18,.94);border:1px solid rgba(139,108,240,.3);pointer-events:none}
     .gameoverlay.show .ovbtns button{flex:1;pointer-events:auto;font-size:13px;padding:10px 12px;min-height:46px}
@@ -464,6 +466,9 @@
     .stagebox{align-items:flex-start;padding-top:calc(8px + env(safe-area-inset-top))}
     .vpad-hint{display:block;position:absolute;left:50%;bottom:calc(100% + 4px);transform:translateX(-50%);
       font-size:10px;color:#8c84a8;white-space:nowrap;pointer-events:none}
+    .gameoverlay.show .ovbtns #ovForce{display:block;flex:0 0 auto;min-width:74px}
+    #forceBtn{display:block}
+    html.force-landscape #ovForce,html.force-landscape #forceBtn{display:none!important}
   }
   /* ===== portrait rotate gate ===== */
   .rotateov{display:none}
@@ -540,6 +545,7 @@
       <div class="mobilebar" id="mobileBar">
         <button id="hudToggle" type="button">HUD</button>
         <button id="orientBtn" type="button">横屏</button>
+        <button id="forceBtn" type="button">强制横屏</button>
         <button id="forceExit" type="button">退出横屏</button>
       </div>
       <button id="bagBtn">背包 B</button>
@@ -602,6 +608,7 @@
           <div class="ovbtns">
             <button id="ovContinue" style="display:none">继续上次进度</button>
             <button id="ovOrient" type="button">横屏</button>
+            <button id="ovForce" type="button">强制横屏</button>
             <button id="ovBtn">开始探索</button>
           </div>
         </div>
@@ -3522,15 +3529,7 @@
       return;
     }
     var dir = (S.keys.right ? 1 : 0) - (S.keys.left ? 1 : 0);
-    if (dir !== 0){
-      S.face = dir;
-    } else {
-      var e = nearestEnemy();
-      var reach = w.reach || 150;
-      if (e && Math.abs(e.x - S.x) <= reach && (e.x - S.x) * S.face > 0){
-        S.face = e.x >= S.x ? 1 : -1;
-      }
-    }
+    if (dir !== 0) S.face = dir;
     S.mp -= mod.mp;
     S.act = MOD_POSE[idx];
     S.actT = 0;
@@ -4809,6 +4808,10 @@
   if (orientBtn) orientBtn.addEventListener("click", toggleOrientation);
   var ovOrient = document.getElementById("ovOrient");
   if (ovOrient) ovOrient.addEventListener("click", toggleOrientation);
+  var ovForce = document.getElementById("ovForce");
+  if (ovForce) ovForce.addEventListener("click", forceLandscapeMode);
+  var forceBtn = document.getElementById("forceBtn");
+  if (forceBtn) forceBtn.addEventListener("click", forceLandscapeMode);
   window.addEventListener("resize", syncRotateGate);
   document.addEventListener("fullscreenchange", syncRotateGate);
   document.addEventListener("orientationchange", function(){ setTimeout(syncRotateGate, 200); });
