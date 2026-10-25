@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>《余烬浮屿》游戏原型 v0.3 · 横版探索与战斗</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>余烬浮屿 · 横版探索与战斗</title>
 <style>
   :root{
     --bg:#07060d; --panel:#12101c; --panel2:#171327; --line:#2a2440;
@@ -353,6 +353,130 @@
     .vbtn b{font-size:12px}
     .vbtn span{font-size:7px}
   }
+  /* ===== phone immersive game mode ===== */
+  @media (pointer:coarse) and (max-width:1000px), (pointer:coarse) and (max-height:600px){
+    html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:#07060d}
+    body{position:fixed;inset:0;width:100%;height:100%}
+    .wrap{display:block;width:100%;max-width:none;height:100%;padding:0;margin:0;overflow:hidden}
+    .wrap > :not(.card){display:none!important}
+    .card{position:fixed;inset:0;width:100%;height:100%;max-width:none;border:0;border-radius:0;
+      box-shadow:none;background:#07060f;overflow:hidden}
+    .stagebox{position:absolute;inset:0;width:100%;height:100%;display:flex;align-items:center;
+      justify-content:center;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,#0d0917,#05040a 70%)}
+    canvas#stage{
+      width:min(100vw, calc(100vh * 16 / 9));height:min(100vh, calc(100vw * 9 / 16));
+      width:min(100vw, calc(100dvh * 16 / 9));height:min(100dvh, calc(100vw * 9 / 16));
+      max-width:100vw;max-height:100dvh;
+    }
+    .hud{top:calc(6px + env(safe-area-inset-top));padding:4px 6px;border-radius:6px;
+      background:rgba(8,6,16,.58);border-color:rgba(139,108,240,.22);backdrop-filter:blur(3px)}
+    .hud.left{left:6px;max-width:132px}
+    .hud.right{right:6px;min-width:0;max-width:150px}
+    .hud .nm{font-size:10px}
+    .hud .rl{font-size:8px}
+    .hud .cb{font-size:8.5px}
+    .hud .st{font-size:8px}
+    #heroRole,#comboTxt,#emberTxt,#statTxt{display:none!important}
+    #tStats{display:none!important}
+    .hud .hpwrap,.hud .mpwrap{width:100px!important;height:4px}
+    .hud.right .hpwrap{width:110px!important}
+    #objectiveTxt{font-size:8px;line-height:1.3;max-width:140px;white-space:normal}
+    #bagBtn,#settingsBtn{display:none}
+    .prompt{bottom:calc(8px + env(safe-area-inset-bottom));font-size:9px}
+    .toast{top:calc(48px + env(safe-area-inset-top));font-size:10px}
+    .controls{display:none!important}
+    .vpad{position:absolute;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:flex-end;
+      justify-content:space-between;gap:8px;padding:0 8px calc(8px + env(safe-area-inset-bottom));
+      background:none;border:0;pointer-events:none}
+    .vpad.vpad-off{display:none!important}
+    .vpad-left{display:flex;gap:6px;align-items:flex-end;pointer-events:none}
+    .vpad-left .vbtn{pointer-events:auto;width:clamp(52px,15vw,64px);height:clamp(56px,16vw,70px);
+      border-radius:14px;background:rgba(20,17,34,.7);border-color:rgba(139,108,240,.4);
+      backdrop-filter:blur(5px);box-shadow:0 4px 12px rgba(0,0,0,.35)}
+    .vpad-left .vbtn b{font-size:18px}
+    .vpad-right{display:grid;
+      grid-template-columns:repeat(4,clamp(44px,10.5vw,50px));
+      grid-template-rows:clamp(44px,10.5vw,50px) clamp(44px,10.5vw,50px) clamp(48px,12vw,56px);
+      grid-template-areas:"i o b set" "l u e q" "j j k k";
+      gap:5px;pointer-events:none}
+    .vpad-right .vbtn{width:100%;height:100%;pointer-events:auto;border-radius:12px;
+      background:rgba(20,17,34,.7);backdrop-filter:blur(5px);box-shadow:0 4px 12px rgba(0,0,0,.35)}
+    [data-vatk="0"]{grid-area:j}
+    [data-vatk="1"]{grid-area:l}
+    [data-vatk="2"]{grid-area:u}
+    [data-vatk="3"]{grid-area:i}
+    [data-vatk="4"]{grid-area:o}
+    [data-vjump]{grid-area:k}
+    [data-vdash]{grid-area:q}
+    [data-vinteract]{grid-area:e}
+    [data-vbag]{grid-area:b}
+    [data-vset]{grid-area:set}
+    .vpad-right [data-vatk="0"],.vpad-right [data-vjump]{border-color:rgba(255,180,90,.55);
+      background:rgba(34,26,22,.88)}
+    .vpad-right [data-vatk="0"] b,.vpad-right [data-vjump] b{font-size:18px}
+    .vbtn span{font-size:8px}
+    .vbtn{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none}
+    .vpad-hint{display:none}
+    .stagebox canvas{touch-action:none}
+    .stagebox .gameoverlay{position:fixed;inset:0;z-index:80;
+      padding:calc(8px + env(safe-area-inset-top)) 8px calc(70px + env(safe-area-inset-bottom));
+      align-items:flex-start;overflow-y:auto;overscroll-behavior:contain;background:rgba(5,4,10,.96)}
+    .stagebox .gameoverlay .ovcard.wide,
+    .stagebox .gameoverlay .invcard,
+    .stagebox .gameoverlay .lootcard,
+    .stagebox .gameoverlay .guidecard,
+    .stagebox .gameoverlay .pausecard{max-height:none;overflow:visible;width:min(100%,720px);margin:0 auto}
+    .stagebox .gameoverlay .ovcard{max-height:none;overflow:visible;width:min(100%,440px);margin:0 auto}
+    .ovcard.wide{padding:10px 10px 56px}
+    .invcard{padding:10px 10px 56px}
+    .lootcard{padding:10px}
+    .invclose{position:fixed;left:12px;right:12px;bottom:calc(8px + env(safe-area-inset-bottom));
+      z-index:90;width:auto;margin:0;padding:10px;background:#1a1424;border-color:#4a3f70;border-radius:9px}
+    .gameoverlay.show .ovbtns{position:fixed;left:12px;right:12px;
+      bottom:calc(8px + env(safe-area-inset-bottom));z-index:90;display:flex;gap:8px;
+      justify-content:stretch;margin:0;padding:8px;border-radius:10px;
+      background:rgba(10,8,18,.94);border:1px solid rgba(139,108,240,.3);pointer-events:none}
+    .gameoverlay.show .ovbtns button{flex:1;pointer-events:auto;font-size:13px;padding:10px 12px;min-height:46px}
+    .ovbtns #ovBtn{flex:1.4}
+    .startgrid{grid-template-columns:1fr;gap:10px}
+    .wpick{grid-template-columns:repeat(3,1fr);gap:6px}
+    .wsel{padding:7px 6px}
+    .wsel .wn{font-size:11px}
+    .wsel .wr{font-size:9px}
+    .wsel .wst{font-size:8.5px}
+    .wprev{padding:8px}
+    .mods5{grid-template-columns:1fr 1fr}
+    .modrow{font-size:9px;padding:4px 5px}
+    .modrow .itemIcon{width:26px;height:26px}
+    .heroshow{gap:8px}
+    #heroShow{width:100%;max-width:240px;height:auto;margin:0 auto}
+    .m-hide{display:none!important}
+  }
+  @media (pointer:coarse) and (orientation:portrait){
+    .stagebox{align-items:flex-start;padding-top:calc(8px + env(safe-area-inset-top))}
+    .vpad-hint{display:block;position:absolute;left:50%;bottom:calc(100% + 4px);transform:translateX(-50%);
+      font-size:10px;color:#8c84a8;white-space:nowrap;pointer-events:none}
+  }
+  /* ===== portrait rotate gate ===== */
+  .rotateov{display:none}
+  @media (pointer:coarse) and (orientation:portrait) and (max-width:1000px){
+    .rotateov{display:flex;position:fixed;inset:0;z-index:120;align-items:center;justify-content:center;
+      padding:calc(20px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));
+      background:radial-gradient(120% 80% at 50% 0%,#0d0917,#05040a 70%);text-align:center}
+    html.portrait-ok .rotateov{display:none!important}
+    .rotatebox{width:min(320px,100%);background:linear-gradient(180deg,#1b1529,#120e1e);
+      border:1px solid rgba(255,180,90,.35);border-radius:16px;padding:24px 20px;
+      box-shadow:0 20px 50px rgba(0,0,0,.55)}
+    .rotateicon{width:58px;height:58px;margin:0 auto 16px;border:2px solid #ffb066;border-radius:12px;
+      position:relative;animation:rotatePhone 2.4s ease-in-out infinite}
+    .rotateicon:after{content:"";position:absolute;left:50%;bottom:5px;width:6px;height:6px;margin-left:-3px;
+      border-radius:50%;background:#a8f2e4}
+    @keyframes rotatePhone{0%,100%{transform:rotate(0deg)}50%{transform:rotate(90deg)}}
+    .rotatebox b{display:block;font-size:20px;color:#ffcf9a;letter-spacing:1px;margin-bottom:8px}
+    .rotatebox p{font-size:12px;color:#a9a0c6;line-height:1.8;margin:0 0 16px}
+    .rotatebox button{font-size:11.5px;padding:10px 14px;min-height:46px;color:#a9a0c6;
+      background:#141122;border:1px solid #3a3050;border-radius:10px}
+  }
 </style>
 </head>
 <body>
@@ -360,10 +484,9 @@
 
   <header>
     <div>
-      <h1>《余烬浮屿》游戏原型 v0.3</h1>
+      <h1>余烬浮屿</h1>
       <p class="sub">纵向下行探索 · 3 层下沉关卡 · 剑 / 法杖 / 枪 三系武器各 5 种攻击模组<br>开始页角色动画演示 · 守卫遗物三选一 · 装备分级并改变角色外观 · B 背包 / Esc 设置保存</p>
     </div>
-    <div class="chip">PLAYABLE PROTOTYPE</div>
   </header>
 
   <div class="card">
@@ -427,19 +550,19 @@
                 <div class="ovrow"><label>友好生物</label><select id="cfgFriends"><option value="1" selected>开启</option><option value="0">关闭</option></select></div>
                 <div class="ovrow"><label>角色</label><select id="cfgHero"><option value="0">拾烬者</option><option value="1">月弦</option><option value="2">夜绫</option></select></div>
               </div>
-              <h4>玩法介绍 <span>第一次进入先看这里</span></h4>
-              <div class="guidebox">
+              <h4 class="m-hide">玩法介绍 <span>第一次进入先看这里</span></h4>
+              <div class="guidebox m-hide">
                 <b>目标</b>：每层从高处开始，沿平台向下探索，找到机关、强化和守卫；击破守卫后下行门开启，进入下一层，连续通过 3 层即可脱出。<br>
-                <b>战斗</b>：J/L/U 是武器的前三套模组，I/O 需要关卡内的技能卷轴解锁。Q 闪避，K / 空格跳跃；站在高处时攻击判定会跟随你的高度。<br>
+                <b>战斗</b>：J/L/U 是武器的前三套模组，I/O 需要关卡内的技能卷轴解锁。Q 闪避，K / 空格跳跃，空中再按一次跳跃可二段跳；站在高处时攻击判定会跟随你的高度。<br>
                 <b>成长</b>：击败敌人获得经验与余烬。升级提升生命、法力、攻击、防御、穿透。按 B 查看完整角色面板、装备、技能和任务。<br>
                 <b>装备</b>：击破每层守卫后会在 3 件遗物中三选一。B1 掉落粗制、B2 精制、B3 秘银，装备会改变角色的胸甲、吊坠和靴子外观。<br>
                 <b>机关</b>：弹跳台把你弹向高处，移动平台可搭乘，拉杆开启紫色屏障，尖刺会持续伤害。<br>
                 <b>探索</b>：青色光环是友好生物，靠近按 E 可获得增益；发光晶核是武器进阶，卷轴解锁新招式，护甲片提升防御。<br>
                 <b>存档</b>：Esc 打开设置，返回玩法选择页会保存当前层数、装备与强化，下次点「继续」从该层重新开始。
               </div>
-              <h4>键位 <span>随时按 B 查背包</span></h4>
-              <div class="guidebox">
-                <em>A / D</em> 移动 · <em>K / 空格 / W</em> 跳跃 · <em>J L U</em> 模组 1-3<br>
+              <h4 class="m-hide">键位 <span>随时按 B 查背包</span></h4>
+              <div class="guidebox m-hide">
+                <em>A / D</em> 移动 · <em>K / 空格 / W</em> 跳跃（空中再按一次二段跳） · <em>J L U</em> 模组 1-3<br>
                 <em>I O</em> 模组 4-5（需解锁） · <em>Q</em> 闪避 · <em>E</em> 互动<br>
                 <em>B</em> 背包 · <em>Esc</em> 设置 / 暂停 · <em>Enter</em> 开始
               </div>
@@ -486,7 +609,7 @@
           <b>怎么玩 · 探索指南</b>
           <div class="glist">
             <strong>1. 向下探索</strong>：每层起点都在高处，沿平台、弹跳台和移动平台向下，终点在底部。<br>
-            <strong>2. 战斗</strong>：<em>J/L/U</em> 三套基础模组，<em>I/O</em> 需要技能卷轴，<em>Q</em> 闪避，<em>K / 空格</em> 跳跃。高处攻击不会打在地面。<br>
+            <strong>2. 战斗</strong>：<em>J/L/U</em> 三套基础模组，<em>I/O</em> 需要技能卷轴，<em>Q</em> 闪避，<em>K / 空格</em> 跳跃，空中再按一次可二段跳。高处攻击不会打在地面。<br>
             <strong>3. 敌人</strong>：小怪会远程射击、追踪飞行、跳跃追击；紫色追踪弹 2–3 秒后消散，横向移动即可甩开。<br>
             <strong>4. 面板</strong>：<em>B</em> 打开背包，查看等级、生命、法力、攻击、防御、穿透、装备、技能与任务。<br>
             <strong>5. 强化</strong>：关卡里找发光晶核（武器进阶）、卷轴（解锁招式）、护甲片（防御）。<br>
@@ -507,21 +630,31 @@
       </div>
     </div>
     <div class="vpad vpad-off" id="vpad">
+      <div class="vpad-hint">横屏游玩视野更宽</div>
       <div class="vpad-left">
         <button class="vbtn" data-vmove="-1"><b>◀</b><span>移动</span></button>
         <button class="vbtn" data-vmove="1"><b>▶</b><span>移动</span></button>
       </div>
       <div class="vpad-right">
-        <button class="vbtn" data-vatk="0"><b>J</b><span>模组1</span></button>
-        <button class="vbtn" data-vatk="1"><b>L</b><span>模组2</span></button>
-        <button class="vbtn" data-vatk="2"><b>U</b><span>模组3</span></button>
-        <button class="vbtn" data-vatk="3"><b>I</b><span>模组4</span></button>
-        <button class="vbtn" data-vatk="4"><b>O</b><span>模组5</span></button>
+        <button class="vbtn" data-vatk="0"><b>J</b><span>普攻</span></button>
+        <button class="vbtn" data-vatk="1"><b>L</b><span>重击</span></button>
+        <button class="vbtn" data-vatk="2"><b>U</b><span>技3</span></button>
+        <button class="vbtn" data-vatk="3"><b>I</b><span>技4</span></button>
+        <button class="vbtn" data-vatk="4"><b>O</b><span>技5</span></button>
         <button class="vbtn" data-vdash="1"><b>Q</b><span>闪避</span></button>
         <button class="vbtn" data-vinteract="1"><b>E</b><span>互动</span></button>
         <button class="vbtn" data-vbag="1"><b>B</b><span>背包</span></button>
         <button class="vbtn vset" data-vset="1"><b>☰</b><span>设置</span></button>
-        <button class="vbtn vjump" data-vjump="1"><b>K</b><span>跳跃</span></button>
+        <button class="vbtn vjump" data-vjump="1"><b>K</b><span>二段跳</span></button>
+      </div>
+    </div>
+
+    <div class="rotateov" id="rotateOv">
+      <div class="rotatebox">
+        <div class="rotateicon"></div>
+        <b>请横屏游玩</b>
+        <p>把手机横过来，画面与按键会自动铺满。<br>横屏后点击“开始探索”即可。</p>
+        <button id="rotateStay">仍然竖屏进入（不推荐）</button>
       </div>
     </div>
 
@@ -542,7 +675,7 @@
         <span class="lbl">操作</span>
         <button class="keybtn" data-move="-1"><b>←</b>移动</button>
         <button class="keybtn" data-move="1"><b>→</b>移动</button>
-        <button class="keybtn" data-jump="1"><b>K / 空格</b>跳跃</button>
+        <button class="keybtn" data-jump="1"><b>K / 空格</b>跳跃（二段）</button>
         <button class="keybtn" data-atk="0"><b>J</b>模组1</button>
         <button class="keybtn" data-atk="1"><b>L</b>模组2</button>
         <button class="keybtn" data-atk="2"><b>U</b>模组3</button>
@@ -552,7 +685,7 @@
         <button class="keybtn" data-interact="1"><b>E</b>互动</button>
         <button class="keybtn" id="bagPageBtn"><b>B</b>背包</button>
       </div>
-      <div class="hint">A/D 或 ←/→ 移动 · K / 空格 / W / ↑ 跳跃 · J L U 模组 1-3 · I O 模组 4-5（关卡内解锁） · Q 闪避 · E 采矿 / 开箱 / 拾取 / 进门 · B 背包 · Esc 设置 · 1/2/3 换角色</div>
+      <div class="hint">A/D 或 ←/→ 移动 · K / 空格 / W / ↑ 跳跃（二段跳） · J L U 模组 1-3 · I O 模组 4-5（关卡内解锁） · Q 闪避 · E 采矿 / 开箱 / 拾取 / 进门 · B 背包 · Esc 设置 · 1/2/3 换角色</div>
       <div class="mods" id="modLines"></div>
     </div>
   </div>
@@ -587,7 +720,7 @@
     3 把武器 × 5 种攻击模组，共 15 套招式；武器在开始页锁定，关卡内通过晶核进阶、卷轴解锁第 4/5 模组。<br>
     3 位角色拥有独立外观、特质与开始页动画演示；守卫遗物三选一，装备分粗制 / 精制 / 秘银三个等级并改变角色外观。<br>
     角色面板含等级、经验、生命、法力、攻击、防御、穿透；按 B 查看背包，Esc 打开设置并保存层数与装备。<br>
-    手机或触屏设备会自动显示虚拟按键：左右移动、K 跳跃、J/L/U/I/O 五个模组、Q 闪避、E 互动、B 背包、设置。
+    手机或触屏设备会自动显示虚拟按键：左右移动、K 跳跃（可二段跳）、J/L/U/I/O 五个模组、Q 闪避、E 互动、B 背包、设置。
   </footer>
 </div>
 
@@ -1244,7 +1377,7 @@
   /* ================= state ================= */
   var S = {
     hero:0, weapon:"sword", wIdx:0, weaponTier:1, unlockTier:0,
-    x:150, y:0, vy:0, face:1, onGround:true,
+    x:150, y:0, vy:0, face:1, onGround:true, airJumped:false,
     act:"idle", actT:0, hitDone:false, mod:null, modIdx:0,
     combo:0, comboT:0,
     tIdx:0, tHp:220, tMax:220, tFlash:0, tDead:0,
@@ -2867,7 +3000,7 @@
     S.guard = makeEnemy(n === 1 ? 8 : (n === 2 ? 21 : 34), map.guard.x, n, true, map.guard.y - GROUND);
     S.enemies.push(S.guard);
     S.gate = { x:map.gate, open:false };
-    S.x = map.start.x; S.y = map.start.y - GROUND; S.vy = 0; S.act = "idle"; S.onGround = true;
+    S.x = map.start.x; S.y = map.start.y - GROUND; S.vy = 0; S.act = "idle"; S.onGround = true; S.airJumped = false;
     S.face = 1;
     S.cam = 0;
     S.camY = Math.min(0, GROUND + S.y - 72);
@@ -2935,6 +3068,11 @@
     return best;
   }
 
+  function enemyJumpPower(height, cap){
+    var need = Math.max(20, height + 28);
+    return Math.min(cap || 580, Math.sqrt(2 * 640 * need));
+  }
+
   function enemyGroundStep(e, dt){
     if (e.fly || e.big) return;
     var sup = supportTopFor(e.x, e.y);
@@ -2950,12 +3088,18 @@
       if (e.vy > 0){
         for (var pi = 0; pi < S.platforms.length; pi++){
           var p = S.platforms[pi], top = p.y - GROUND;
-          if (prev <= top && e.y >= top && e.x > p.x - 8 && e.x < p.x + p.w + 8){ land = top; break; }
+          if (prev <= top && e.y >= top && e.x > p.x - 12 && e.x < p.x + p.w + 12){
+            e.x = Math.max(p.x + 2, Math.min(p.x + p.w - 2, e.x));
+            land = top; break;
+          }
         }
         if (land === null){
           for (var mi = 0; mi < S.movers.length; mi++){
             var mp = S.movers[mi], mt = mp.y - GROUND;
-            if (prev <= mt && e.y >= mt && e.x > mp.x - 8 && e.x < mp.x + mp.w + 8){ land = mt; break; }
+            if (prev <= mt && e.y >= mt && e.x > mp.x - 12 && e.x < mp.x + mp.w + 12){
+              e.x = Math.max(mp.x + 2, Math.min(mp.x + mp.w - 2, e.x));
+              land = mt; break;
+            }
           }
         }
       }
@@ -3265,7 +3409,7 @@
       S.hp = S.maxHp; S.mp = S.maxMp;
       genLayer(1, false);
       toast("B1 灰烬浅层：从高处向下，先看看脚下的平台");
-      setTimeout(function(){ if (S.game === "play") toast("J / L / U 是前三套招式，Q 闪避，K / 空格跳跃；高处攻击会跟随你的高度"); }, 3800);
+      setTimeout(function(){ if (S.game === "play") toast("J / L / U 是前三套招式，Q 闪避，K / 空格跳跃（可二段跳）；高处攻击会跟随你的高度"); }, 3800);
       setTimeout(function(){ if (S.game === "play") toast("按 B 打开背包查看属性与任务；Esc 打开设置可保存并返回开始页"); }, 9000);
       setTimeout(function(){ if (S.game === "play") toast("青色光环是友好生物；发光晶核 / 卷轴 / 护甲片会强化本局"); }, 14500);
     }
@@ -3363,6 +3507,17 @@
       S.onGround = false;
       S.vy = -265;
       S.act = "jump";
+      S.airJumped = false;
+      return;
+    }
+    if (!S.onGround && !S.airJumped && S.act !== "dash"){
+      S.vy = -248;
+      S.act = "jump";
+      S.airJumped = true;
+      var fy = GROUND + S.y;
+      fxAdd({ type:"ring", x:S.x, y:fy, r:18, color:"#a8f2e4", max:0.28 });
+      part(S.x, fy, 10, { colors:["#a8f2e4","#ffffff","#7ee0d0"], speed:70, lift:18, life:0.35, g:60 });
+      S.shake = Math.max(S.shake, 2);
     }
   }
 
@@ -3422,20 +3577,20 @@
       for (var pi = 0; pi < S.platforms.length; pi++){
         var p = S.platforms[pi], top = p.y - GROUND;
         if (prevY <= top && S.y >= top && S.x > p.x - 6 && S.x < p.x + p.w + 6){
-          S.y = top; S.vy = 0; landed = true; S.onGround = true; break;
+          S.y = top; S.vy = 0; landed = true; S.onGround = true; S.airJumped = false; break;
         }
       }
       if (!landed){
         for (var mj = 0; mj < S.movers.length; mj++){
           var mp = S.movers[mj], mtop = mp.y - GROUND;
           if (prevY <= mtop && S.y >= mtop && S.x > mp.x - 6 && S.x < mp.x + mp.w + 6){
-            S.y = mtop; S.vy = 0; landed = true; S.onGround = true; ride = mj; break;
+            S.y = mtop; S.vy = 0; landed = true; S.onGround = true; ride = mj; S.airJumped = false; break;
           }
         }
       }
     }
     if (!landed && S.y >= 0){
-      S.y = 0; S.vy = 0; S.onGround = true;
+      S.y = 0; S.vy = 0; S.onGround = true; S.airJumped = false;
     }
     if (ride >= 0) S.x += S.movers[ride].dx;
 
@@ -3536,7 +3691,8 @@
       var dy = S.y - e.y;
       var ady = Math.abs(dy);
       var sign = dx > 0 ? 1 : -1;
-      var see = adx < (e.big ? 460 : 340) && (e.fly || ady < 160);
+      var verticalSight = e.fly ? 999 : (e.aiType === "jumper" ? 430 : (e.aiType === "chase" ? 380 : 200));
+      var see = adx < (e.big ? 460 : 340) && (e.fly || ady < verticalSight);
       if (see) e.state = "chase";
       else if (adx > 380) e.state = "patrol";
 
@@ -3642,11 +3798,11 @@
             damagePlayer(e.atk);
           }
         } else if (e.aiType === "jumper"){
-          if (adx > 18) e.x += sign * 44 * dt;
+          if (adx > 18) e.x += sign * (e.onGround ? 44 : 70) * dt;
           if (e.onGround && e.leapCd <= 0 && (dy < -12 || ady > 50 || rnd() < 0.25)){
-            e.vy = -290;
+            e.vy = -Math.max(300, enemyJumpPower(Math.max(0, -dy), 760));
             e.onGround = false;
-            e.leapCd = 1.5 + rnd() * 0.6;
+            e.leapCd = 1.15 + rnd() * 0.55;
             part(e.x, GROUND + e.y, 6, { colors:["#8d90a3", "#ffffff"], speed:40, lift:10, life:0.3, g:100 });
           }
           enemyGroundStep(e, dt);
@@ -3656,15 +3812,15 @@
             damagePlayer(e.atk);
           }
         } else {
-          if (adx > 24) e.x += sign * (e.fly ? 36 : 38) * dt;
+          if (adx > 24) e.x += sign * (e.fly ? 36 : (e.onGround ? 38 : 54)) * dt;
           if (e.fly){
             var targetY = S.y - 18;
             if (Math.abs(targetY - e.y) > 6) e.y += (targetY > e.y ? 1 : -1) * Math.min(46 * dt, Math.abs(targetY - e.y));
           } else {
             if (e.onGround && e.leapCd <= 0 && dy < -18){
-              e.vy = -250;
+              e.vy = -Math.max(260, enemyJumpPower(-dy, 740));
               e.onGround = false;
-              e.leapCd = 1.8;
+              e.leapCd = 1.45;
             }
             enemyGroundStep(e, dt);
           }
@@ -4413,19 +4569,27 @@
   /* ================= mobile virtual pad ================= */
   var vpadEl = document.getElementById("vpad");
 
-  function bindVirtualButton(btn, onDown, onUp){
-    var held = false;
+  function bindVirtualButton(btn, onDown, onUp, repeatMs){
+    var held = false, timer = null;
+    function clearTimer(){
+      if (timer){ clearInterval(timer); timer = null; }
+    }
     function down(e){
       if (e){ e.preventDefault(); e.stopPropagation(); }
       if (held) return;
       held = true;
       btn.classList.add("down");
       onDown();
+      if (repeatMs){
+        clearTimer();
+        timer = setInterval(function(){ if (held) onDown(); }, repeatMs);
+      }
     }
     function up(e){
       if (e){ e.preventDefault(); e.stopPropagation(); }
       if (!held) return;
       held = false;
+      clearTimer();
       btn.classList.remove("down");
       if (onUp) onUp();
     }
@@ -4438,6 +4602,7 @@
     btn.addEventListener("click", function(e){ e.preventDefault(); });
     btn.__padReset = function(){
       held = false;
+      clearTimer();
       btn.classList.remove("down");
     };
   }
@@ -4459,7 +4624,7 @@
     for (var a = 0; a < atks.length; a++){
       (function(btn){
         var idx = parseInt(btn.getAttribute("data-vatk"), 10);
-        bindVirtualButton(btn, function(){ S.autoT = 0; if (!S.onGround && idx === 0) startAir(); else startAttack(idx); }, null);
+        bindVirtualButton(btn, function(){ S.autoT = 0; if (!S.onGround && idx === 0) startAir(); else startAttack(idx); }, null, idx === 0 ? 130 : 0);
       })(atks[a]);
     }
     var jumps = vpadEl.querySelectorAll("[data-vjump]");
@@ -4487,6 +4652,11 @@
   }
 
   setupVirtualPad();
+
+  var rotateStay = document.getElementById("rotateStay");
+  if (rotateStay) rotateStay.addEventListener("click", function(){
+    document.documentElement.classList.add("portrait-ok");
+  });
 
   /* ================= hero demo + boss loot ================= */
   function renderHeroPicker(){
