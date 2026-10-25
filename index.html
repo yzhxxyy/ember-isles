@@ -182,6 +182,7 @@
   .vpad{display:none;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;
     background:linear-gradient(180deg,#141122,#0d0a16);border-top:1px solid var(--line);
     touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+  .mobilebar{display:none}
   .vpad.vpad-off{display:none!important}
   .vpad-left{display:flex;gap:6px;align-items:center}
   .vpad-right{display:grid;grid-template-columns:repeat(5,40px);grid-auto-rows:40px;gap:5px}
@@ -206,6 +207,7 @@
   }
   .ovbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap;
     position:sticky;bottom:-2px;z-index:2;padding:9px 0 2px;background:transparent;pointer-events:none}
+  #ovOrient{display:none}
   .ovbtns button{font-size:12px;padding:8px 16px;pointer-events:auto}
   .ovbtns #ovBtn{font-size:13px;padding:9px 22px;color:#1a1208;border-color:#ffb066;
     background:linear-gradient(180deg,#ffd166,#ff9c4a);border-radius:9px}
@@ -368,20 +370,25 @@
       width:min(100vw, calc(100dvh * 16 / 9));height:min(100dvh, calc(100vw * 9 / 16));
       max-width:100vw;max-height:100dvh;
     }
-    .hud{top:calc(6px + env(safe-area-inset-top));padding:4px 6px;border-radius:6px;
-      background:rgba(8,6,16,.58);border-color:rgba(139,108,240,.22);backdrop-filter:blur(3px)}
-    .hud.left{left:6px;max-width:132px}
-    .hud.right{right:6px;min-width:0;max-width:150px}
-    .hud .nm{font-size:10px}
+    .hud{top:calc(6px + env(safe-area-inset-top));padding:3px 5px;border-radius:6px;
+      background:rgba(8,6,16,.42);border-color:rgba(139,108,240,.18);backdrop-filter:blur(3px)}
+    .hud.left{left:6px;max-width:106px}
+    .hud.right{right:6px;min-width:0;max-width:112px}
+    .hud .nm{font-size:9px}
     .hud .rl{font-size:8px}
-    .hud .cb{font-size:8.5px}
+    .hud .cb{font-size:8px}
     .hud .st{font-size:8px}
-    #heroRole,#comboTxt,#emberTxt,#statTxt{display:none!important}
-    #tStats{display:none!important}
-    .hud .hpwrap,.hud .mpwrap{width:100px!important;height:4px}
-    .hud.right .hpwrap{width:110px!important}
-    #objectiveTxt{font-size:8px;line-height:1.3;max-width:140px;white-space:normal}
+    #heroName,#heroRole,#comboTxt,#emberTxt,#buffTxt,#hpmpTxt,#statTxt,#tName,#tBand,#tStats,#objectiveTxt{display:none!important}
+    .hud .hpwrap,.hud .mpwrap{width:94px!important;height:4px;margin-top:3px}
+    .hud.right .hpwrap{width:102px!important;margin-top:0}
     #bagBtn,#settingsBtn{display:none}
+    .mobilebar{display:flex;position:absolute;top:calc(6px + env(safe-area-inset-top));left:50%;
+      transform:translateX(-50%);z-index:35;gap:6px;pointer-events:none}
+    .mobilebar button{pointer-events:auto;font-size:9px;line-height:1;padding:0 8px;height:28px;
+      color:#c9c2e2;background:rgba(12,9,20,.55);border:1px solid rgba(139,108,240,.3);
+      border-radius:999px;backdrop-filter:blur(3px)}
+    .mobilebar button.off{color:#ffcf9a;border-color:rgba(255,180,90,.55)}
+    .card.hud-off .hud{display:none!important}
     .prompt{bottom:calc(8px + env(safe-area-inset-bottom));font-size:9px}
     .toast{top:calc(48px + env(safe-area-inset-top));font-size:10px}
     .controls{display:none!important}
@@ -437,6 +444,7 @@
       justify-content:stretch;margin:0;padding:8px;border-radius:10px;
       background:rgba(10,8,18,.94);border:1px solid rgba(139,108,240,.3);pointer-events:none}
     .gameoverlay.show .ovbtns button{flex:1;pointer-events:auto;font-size:13px;padding:10px 12px;min-height:46px}
+    .gameoverlay.show .ovbtns #ovOrient{display:block;flex:0 0 auto;min-width:64px}
     .ovbtns #ovBtn{flex:1.4}
     .startgrid{grid-template-columns:1fr;gap:10px}
     .wpick{grid-template-columns:repeat(3,1fr);gap:6px}
@@ -474,8 +482,26 @@
     @keyframes rotatePhone{0%,100%{transform:rotate(0deg)}50%{transform:rotate(90deg)}}
     .rotatebox b{display:block;font-size:20px;color:#ffcf9a;letter-spacing:1px;margin-bottom:8px}
     .rotatebox p{font-size:12px;color:#a9a0c6;line-height:1.8;margin:0 0 16px}
+    .rotatebtns{display:flex;flex-direction:column;gap:8px}
+    .rotatebox .primary{color:#1a1208;border-color:#ffb066;
+      background:linear-gradient(180deg,#ffd166,#ff9c4a);font-weight:600}
     .rotatebox button{font-size:11.5px;padding:10px 14px;min-height:46px;color:#a9a0c6;
       background:#141122;border:1px solid #3a3050;border-radius:10px}
+  }
+  #forceExit{display:none}
+  @media (pointer:coarse){
+    html.force-landscape .card{position:fixed;left:50%;top:50%;width:100vh;height:100vw;
+      width:100dvh;height:100dvw;
+      transform:translate(-50%,-50%) rotate(90deg);transform-origin:center center}
+    html.force-landscape .rotateov{display:none!important}
+    html.force-landscape #orientBtn{display:none}
+    html.force-landscape #forceExit{display:block}
+    html.force-landscape canvas#stage{
+      width:min(100vh, calc(100vw * 16 / 9));
+      height:min(100vw, calc(100vh * 9 / 16));
+      width:min(100dvh, calc(100dvw * 16 / 9));
+      height:min(100dvw, calc(100dvh * 9 / 16));
+    }
   }
 </style>
 </head>
@@ -510,6 +536,11 @@
         <div class="hpwrap"><i class="hpbar" id="hpBar"></i></div>
         <div class="st" id="tStats">Lv · 攻 · 防 · 穿 · MP</div>
         <div class="rl" id="objectiveTxt" style="color:#ffcf9a">目标：向下探索</div>
+      </div>
+      <div class="mobilebar" id="mobileBar">
+        <button id="hudToggle" type="button">HUD</button>
+        <button id="orientBtn" type="button">横屏</button>
+        <button id="forceExit" type="button">退出横屏</button>
       </div>
       <button id="bagBtn">背包 B</button>
       <button id="settingsBtn">设置 Esc</button>
@@ -570,6 +601,7 @@
           </div>
           <div class="ovbtns">
             <button id="ovContinue" style="display:none">继续上次进度</button>
+            <button id="ovOrient" type="button">横屏</button>
             <button id="ovBtn">开始探索</button>
           </div>
         </div>
@@ -653,8 +685,12 @@
       <div class="rotatebox">
         <div class="rotateicon"></div>
         <b>请横屏游玩</b>
-        <p>把手机横过来，画面与按键会自动铺满。<br>横屏后点击“开始探索”即可。</p>
-        <button id="rotateStay">仍然竖屏进入（不推荐）</button>
+        <p>把手机横过来，画面与按键会自动铺满。<br>如果横屏后仍显示此页，请关闭手机的竖屏锁定；仍不行可点“强制横屏显示”。</p>
+        <div class="rotatebtns">
+          <button id="rotateLandscape" class="primary">尝试自动横屏</button>
+          <button id="rotateForce">强制横屏显示</button>
+          <button id="rotateStay">仍然竖屏进入（不推荐）</button>
+        </div>
       </div>
     </div>
 
@@ -833,11 +869,11 @@
   ];
   var EQUIP_SLOTS = {
     armor:{ name:"护甲", names:["烬纹皮甲","月髓胸甲","影银战甲","烬金圣铠"],
-      desc:"提高防御与生命上限，并改变胸甲与肩甲外观。" },
+      desc:"提高防御与生命上限，并提供持续回血与击杀回血。" },
     charm:{ name:"护符", names:["余烬吊坠","月华符印","影蚀徽记","熔心护符"],
-      desc:"提高攻击与穿透，并在角色胸前形成符光。" },
+      desc:"提高攻击与穿透，并提供持续回魔与击杀回魔。" },
     boots:{ name:"战靴", names:["浮屿长靴","风纹战靴","影行靴","烬羽疾行靴"],
-      desc:"提高移动速度、缩短冲刺冷却，并改变靴子配色。" }
+      desc:"提高移动速度、缩短冲刺冷却，并小幅回复生命。" }
   };
   function equipTierInfo(t){
     t = t || 0;
@@ -846,9 +882,9 @@
   function equipStats(slot, tier){
     tier = tier || 0;
     if (!tier) return {};
-    if (slot === "armor") return { def:3 + tier * 4, hp:6 + tier * 8 };
-    if (slot === "charm") return { atk:2 + tier * 2, pen:1 + tier };
-    return { speed:0.04 * tier, dash:0.05 * tier, mp:2 * tier };
+    if (slot === "armor") return { def:3 + tier * 4, hp:6 + tier * 8, hpRegen:0.25 + tier * 0.2, healOnKill:1 + tier };
+    if (slot === "charm") return { atk:2 + tier * 2, pen:1 + tier, mpRegen:0.6 + tier * 0.45, mpOnKill:1 + tier };
+    return { speed:0.04 * tier, dash:0.05 * tier, mp:2 * tier, hpRegen:0.05 * tier };
   }
   function equipName(slot, tier){
     if (!tier) return "未装备";
@@ -858,9 +894,12 @@
   function equipStatText(slot, tier){
     var s = equipStats(slot, tier);
     if (!tier) return "无加成";
-    if (slot === "armor") return "防御 +" + s.def + " · 生命 +" + s.hp;
-    if (slot === "charm") return "攻击 +" + s.atk + " · 穿透 +" + s.pen;
-    return "移速 +" + Math.round(s.speed * 100) + "% · 冲刺CD -" + s.dash.toFixed(2) + "s · 法力 +" + s.mp;
+    if (slot === "armor") return "防御 +" + s.def + " · 生命 +" + s.hp +
+      " · 回血 +" + s.hpRegen.toFixed(1) + "/s · 击杀回血 +" + s.healOnKill;
+    if (slot === "charm") return "攻击 +" + s.atk + " · 穿透 +" + s.pen +
+      " · 回魔 +" + s.mpRegen.toFixed(1) + "/s · 击杀回魔 +" + s.mpOnKill;
+    return "移速 +" + Math.round(s.speed * 100) + "% · 冲刺CD -" + s.dash.toFixed(2) +
+      "s · 法力 +" + s.mp + " · 回血 +" + s.hpRegen.toFixed(1) + "/s";
   }
   function equipItem(slot, tier){
     var info = equipTierInfo(tier);
@@ -1390,6 +1429,7 @@
     level:1, xp:0, xpNext:40,
     maxHp:170, hp:170, maxMp:60, mp:60,
     atk:23, def:20, pen:4, armor:0,
+    hpRegen:0.1, mpRegen:2.5, healOnKill:0, mpOnKill:0,
     equip:{ armor:0, charm:0, boots:0 }, lootChoices:[], lootOffered:false,
     unlockedSkills:[], upgrades:[], kills:0,
     amb:[
@@ -2953,6 +2993,10 @@
     S.atk = w.stats.atk + b.atk + (S.level - 1) * 2 + (S.weaponTier - 1) * 3 + (charm.atk || 0);
     S.def = w.stats.def + b.def + (S.level - 1) + S.armor * 4 + (arm.def || 0);
     S.pen = w.stats.pen + b.pen + (S.level - 1) + (charm.pen || 0);
+    S.hpRegen = 0.1 + (S.level - 1) * 0.12 + (arm.hpRegen || 0) + (charm.hpRegen || 0) + (boots.hpRegen || 0);
+    S.mpRegen = w.regen + 1.5 + (b.regen || 0) + (S.level - 1) * 0.18 + (charm.mpRegen || 0) + (boots.mpRegen || 0);
+    S.healOnKill = (arm.healOnKill || 0) + (charm.healOnKill || 0) + (boots.healOnKill || 0);
+    S.mpOnKill = (arm.mpOnKill || 0) + (charm.mpOnKill || 0) + (boots.mpOnKill || 0);
     S.maxHp = Math.max(20, S.maxHp);
     S.maxMp = Math.max(10, S.maxMp);
     if (keepRatio) S.hp = Math.min(S.maxHp, Math.round(S.maxHp * ratio));
@@ -2961,7 +3005,7 @@
   }
 
   function mpRegenValue(){
-    return weaponById(S.weapon).regen + 1.5 + (HEROES[S.hero].bonus.regen || 0);
+    return S.mpRegen || (weaponById(S.weapon).regen + 1.5 + (HEROES[S.hero].bonus.regen || 0));
   }
 
   function genLayer(n, heal){
@@ -3158,11 +3202,11 @@
       S.level++;
       S.xpNext = Math.round(S.xpNext * 1.35 + 10);
       recalcStats(true);
-      S.hp = Math.min(S.maxHp, S.hp + Math.round(S.maxHp * 0.3));
+      S.hp = Math.min(S.maxHp, S.hp + Math.round(S.maxHp * 0.3) + 6 + S.level * 2);
       S.mp = S.maxMp;
       S.flash = 0.2; S.flashColor = "#7ee0d0";
       S.texts.push({ x:S.x, y:GROUND + S.y - 52, vy:-30, life:0, max:1.0, txt:"LEVEL UP", color:"#7ee0d0" });
-      toast("升级！Lv " + S.level + " · 生命 / 法力 / 攻防 / 穿透提升");
+      toast("升级！Lv " + S.level + " · 回血 " + S.hpRegen.toFixed(1) + "/s · 回魔 " + S.mpRegen.toFixed(1) + "/s");
     }
   }
 
@@ -3182,8 +3226,8 @@
       S.kills++;
       gainXp(e.big ? 30 + S.layer * 8 : 8 + S.layer * 2);
       S.embers += e.big ? 14 : 2;
-      S.hp = Math.min(S.maxHp, S.hp + (e.big ? 20 : 2));
-      S.mp = Math.min(S.maxMp, S.mp + (e.big ? 24 : 4));
+      S.hp = Math.min(S.maxHp, S.hp + (e.big ? 20 : 2) + (S.healOnKill || 0));
+      S.mp = Math.min(S.maxMp, S.mp + (e.big ? 24 : 4) + (S.mpOnKill || 0));
       part(e.x, GROUND + e.y - 16, e.big ? 34 : 16, { colors:[color, "#ffd166", "#ffffff"], speed:100, life:0.7, g:110 });
       S.shake = e.big ? 8 : 3;
       if (e.big){
@@ -3477,8 +3521,16 @@
       toast("法力不足：等待回复或贴近敌人普攻");
       return;
     }
-    var e = nearestEnemy();
-    if (e) S.face = e.x >= S.x ? 1 : -1;
+    var dir = (S.keys.right ? 1 : 0) - (S.keys.left ? 1 : 0);
+    if (dir !== 0){
+      S.face = dir;
+    } else {
+      var e = nearestEnemy();
+      var reach = w.reach || 150;
+      if (e && Math.abs(e.x - S.x) <= reach && (e.x - S.x) * S.face > 0){
+        S.face = e.x >= S.x ? 1 : -1;
+      }
+    }
     S.mp -= mod.mp;
     S.act = MOD_POSE[idx];
     S.actT = 0;
@@ -3547,6 +3599,9 @@
 
     S.dashCd = Math.max(0, S.dashCd - dt);
     for (var ci = 0; ci < 5; ci++) S.cdMods[ci] = Math.max(0, S.cdMods[ci] - dt);
+    if (S.hpRegen > 0 && S.hp > 0 && S.hp < S.maxHp){
+      S.hp = Math.min(S.maxHp, S.hp + S.hpRegen * dt);
+    }
     S.mp = Math.min(S.maxMp, S.mp + mpRegenValue() * dt);
 
     if (CAN_ACT[S.act]){
@@ -4570,12 +4625,16 @@
   var vpadEl = document.getElementById("vpad");
 
   function bindVirtualButton(btn, onDown, onUp, repeatMs){
-    var held = false, timer = null;
+    var held = false, timer = null, lastTouchAt = 0;
     function clearTimer(){
       if (timer){ clearInterval(timer); timer = null; }
     }
     function down(e){
-      if (e){ e.preventDefault(); e.stopPropagation(); }
+      if (e){
+        if (e.type === "touchstart") lastTouchAt = Date.now();
+        if (e.type === "mousedown" && Date.now() - lastTouchAt < 700) return;
+        e.preventDefault(); e.stopPropagation();
+      }
       if (held) return;
       held = true;
       btn.classList.add("down");
@@ -4586,7 +4645,11 @@
       }
     }
     function up(e){
-      if (e){ e.preventDefault(); e.stopPropagation(); }
+      if (e){
+        if ((e.type === "touchend" || e.type === "touchcancel")) lastTouchAt = Date.now();
+        if ((e.type === "mouseup" || e.type === "mouseleave") && Date.now() - lastTouchAt < 700) return;
+        e.preventDefault(); e.stopPropagation();
+      }
       if (!held) return;
       held = false;
       clearTimer();
@@ -4656,6 +4719,108 @@
   var rotateStay = document.getElementById("rotateStay");
   if (rotateStay) rotateStay.addEventListener("click", function(){
     document.documentElement.classList.add("portrait-ok");
+    syncRotateGate();
+  });
+
+  function requestLandscapeMode(){
+    document.documentElement.classList.remove("portrait-ok");
+    document.documentElement.classList.remove("force-landscape");
+    var el = document.documentElement;
+    function lock(){
+      try {
+        if (screen.orientation && screen.orientation.lock){
+          var p = screen.orientation.lock("landscape");
+          if (p && p.catch) p.catch(function(){});
+        }
+      } catch(e){}
+    }
+    try {
+      if (el.requestFullscreen && !document.fullscreenElement){
+        var fp = el.requestFullscreen();
+        if (fp && fp.then) fp.then(lock).catch(lock);
+        else lock();
+      } else {
+        lock();
+      }
+    } catch(e){ lock(); }
+    toast("请把手机横过来 · 横屏后自动铺满");
+    syncRotateGate();
+  }
+
+  function forceLandscapeMode(){
+    document.documentElement.classList.remove("portrait-ok");
+    document.documentElement.classList.add("force-landscape");
+    syncRotateGate();
+    toast("已强制横屏，请把手机横过来");
+  }
+
+  function exitForceLandscape(){
+    document.documentElement.classList.remove("force-landscape");
+    document.documentElement.classList.add("portrait-ok");
+    syncRotateGate();
+  }
+
+  function syncRotateGate(){
+    var html = document.documentElement;
+    var portrait = window.innerHeight > window.innerWidth;
+    if (!portrait) html.classList.remove("force-landscape");
+    var forced = html.classList.contains("portrait-ok") || html.classList.contains("force-landscape");
+    var coarse = window.matchMedia && window.matchMedia("(pointer:coarse)").matches;
+    var ov = document.getElementById("rotateOv");
+    if (ov) ov.style.display = (coarse && portrait && !forced) ? "flex" : "none";
+    syncOrientBtn();
+  }
+
+  function syncOrientBtn(){
+    var portrait = window.innerHeight > window.innerWidth;
+    var force = document.documentElement.classList.contains("force-landscape");
+    var b = document.getElementById("orientBtn");
+    if (b) b.textContent = force ? "退出横屏" : (portrait ? "横屏" : (document.fullscreenElement ? "退出全屏" : "全屏"));
+    var o = document.getElementById("ovOrient");
+    if (o) o.textContent = force ? "退出横屏" : (portrait ? "横屏" : "全屏");
+  }
+
+  function toggleOrientation(){
+    if (document.documentElement.classList.contains("force-landscape")){
+      exitForceLandscape();
+      return;
+    }
+    if (window.innerHeight > window.innerWidth){
+      requestLandscapeMode();
+    } else if (document.fullscreenElement){
+      if (document.exitFullscreen) document.exitFullscreen().catch(function(){});
+    } else if (document.documentElement.requestFullscreen){
+      document.documentElement.requestFullscreen().catch(function(){
+        toast("当前浏览器不支持全屏，请手动横屏");
+      });
+    } else {
+      toast("当前浏览器不支持全屏，请手动横屏");
+    }
+    setTimeout(syncOrientBtn, 120);
+  }
+
+  var rotateLandscape = document.getElementById("rotateLandscape");
+  if (rotateLandscape) rotateLandscape.addEventListener("click", requestLandscapeMode);
+  var rotateForce = document.getElementById("rotateForce");
+  if (rotateForce) rotateForce.addEventListener("click", forceLandscapeMode);
+  var forceExit = document.getElementById("forceExit");
+  if (forceExit) forceExit.addEventListener("click", exitForceLandscape);
+  var orientBtn = document.getElementById("orientBtn");
+  if (orientBtn) orientBtn.addEventListener("click", toggleOrientation);
+  var ovOrient = document.getElementById("ovOrient");
+  if (ovOrient) ovOrient.addEventListener("click", toggleOrientation);
+  window.addEventListener("resize", syncRotateGate);
+  document.addEventListener("fullscreenchange", syncRotateGate);
+  document.addEventListener("orientationchange", function(){ setTimeout(syncRotateGate, 200); });
+  if (window.visualViewport) window.visualViewport.addEventListener("resize", syncRotateGate);
+  setInterval(syncRotateGate, 900);
+  syncRotateGate();
+
+  var hudToggle = document.getElementById("hudToggle");
+  var cardEl = document.querySelector(".card");
+  if (hudToggle && cardEl) hudToggle.addEventListener("click", function(){
+    var off = cardEl.classList.toggle("hud-off");
+    hudToggle.classList.toggle("off", off);
   });
 
   /* ================= hero demo + boss loot ================= */
@@ -4684,10 +4849,15 @@
     var gearBonus = [];
     if (arm.def) gearBonus.push("防 +" + arm.def);
     if (arm.hp) gearBonus.push("生命 +" + arm.hp);
+    if (arm.hpRegen) gearBonus.push("回血 +" + arm.hpRegen.toFixed(1) + "/s");
+    if (arm.healOnKill) gearBonus.push("击杀回血 +" + arm.healOnKill);
     if (charm.atk) gearBonus.push("攻 +" + charm.atk);
     if (charm.pen) gearBonus.push("穿 +" + charm.pen);
+    if (charm.mpRegen) gearBonus.push("回魔 +" + charm.mpRegen.toFixed(1) + "/s");
+    if (charm.mpOnKill) gearBonus.push("击杀回魔 +" + charm.mpOnKill);
     if (boots.speed) gearBonus.push("移速 +" + Math.round(boots.speed * 100) + "%");
     if (boots.mp) gearBonus.push("法力 +" + boots.mp);
+    if (boots.hpRegen) gearBonus.push("回血 +" + boots.hpRegen.toFixed(1) + "/s");
     box.innerHTML =
       '<b>' + h.name + ' · ' + h.title + '</b>' +
       h.bio + '<br>' +
@@ -5040,7 +5210,9 @@
       '<div class="invrow"><span>防御</span><b>' + Math.round(S.def) + '</b></div>' +
       '<div class="invrow"><span>穿透</span><b>' + Math.round(S.pen) + '</b></div>' +
       '<div class="invrow"><span>攻击距离</span><b>' + w.reach + '</b></div>' +
-      '<div class="invrow"><span>法力回复</span><b>' + mpRegenValue().toFixed(1) + '/s</b></div>' +
+      '<div class="invrow"><span>生命回复</span><b class="up">+' + (S.hpRegen || 0).toFixed(1) + '/s</b></div>' +
+      '<div class="invrow"><span>法力回复</span><b>+' + mpRegenValue().toFixed(1) + '/s</b></div>' +
+      '<div class="invrow"><span>击杀回复</span><b>+' + (S.healOnKill || 0) + ' HP · +' + (S.mpOnKill || 0) + ' MP</b></div>' +
       '<div class="invrow"><span>余烬 / 击杀</span><b>' + S.embers + ' · ' + S.kills + '</b></div>';
     var gear = $("invGear");
     function eqRow(label, slot){
@@ -5184,7 +5356,8 @@
     lvTxt.textContent = "Lv " + S.level + " · EXP " + S.xp + "/" + S.xpNext;
     comboTxt.textContent = "连段 " + S.combo;
     emberTxt.textContent = "余烬 " + S.embers;
-    statTxt.textContent = "攻 " + Math.round(S.atk) + " · 防 " + Math.round(S.def) + " · 穿 " + Math.round(S.pen);
+    statTxt.textContent = "攻 " + Math.round(S.atk) + " · 防 " + Math.round(S.def) + " · 穿 " + Math.round(S.pen) +
+      " · 回血 " + (S.hpRegen || 0).toFixed(1) + "/s · 回魔 " + mpRegenValue().toFixed(1) + "/s";
     if (hpmpTxt) hpmpTxt.textContent = "HP " + Math.ceil(S.hp) + "/" + S.maxHp + " · MP " + Math.ceil(S.mp) + "/" + S.maxMp;
     if (phpBar) phpBar.style.width = Math.max(0, (S.hp / S.maxHp) * 100) + "%";
     if (mpBar) mpBar.style.width = Math.max(0, (S.mp / S.maxMp) * 100) + "%";
