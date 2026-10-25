@@ -385,8 +385,8 @@
     .hud.right .hpwrap{width:102px!important;margin-top:0}
     #bagBtn,#settingsBtn{display:none}
     .mobilebar{display:flex;position:absolute;top:calc(6px + env(safe-area-inset-top));left:50%;
-      transform:translateX(-50%);z-index:35;gap:6px;pointer-events:none}
-    .mobilebar button{pointer-events:auto;font-size:9px;line-height:1;padding:0 8px;height:28px;
+      transform:translateX(-50%);z-index:35;gap:10px;pointer-events:none}
+    .mobilebar button{pointer-events:auto;font-size:9px;line-height:1;padding:0 10px;height:30px;
       color:#c9c2e2;background:rgba(12,9,20,.55);border:1px solid rgba(139,108,240,.3);
       border-radius:999px;backdrop-filter:blur(3px)}
     .mobilebar button.off{color:#ffcf9a;border-color:rgba(255,180,90,.55)}
@@ -395,19 +395,19 @@
     .toast{top:calc(48px + env(safe-area-inset-top));font-size:10px}
     .controls{display:none!important}
     .vpad{position:absolute;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:flex-end;
-      justify-content:space-between;gap:8px;padding:0 8px calc(8px + env(safe-area-inset-bottom));
+      justify-content:space-between;gap:12px;padding:0 10px calc(8px + env(safe-area-inset-bottom));
       background:none;border:0;pointer-events:none}
     .vpad.vpad-off{display:none!important}
-    .vpad-left{display:flex;gap:6px;align-items:flex-end;pointer-events:none}
+    .vpad-left{display:flex;gap:clamp(16px,3vw,28px);align-items:flex-end;pointer-events:none}
     .vpad-left .vbtn{pointer-events:auto;width:clamp(52px,15vw,64px);height:clamp(56px,16vw,70px);
       border-radius:14px;background:rgba(20,17,34,.7);border-color:rgba(139,108,240,.4);
       backdrop-filter:blur(5px);box-shadow:0 4px 12px rgba(0,0,0,.35)}
     .vpad-left .vbtn b{font-size:18px}
     .vpad-right{display:grid;
-      grid-template-columns:repeat(4,clamp(44px,10.5vw,50px));
-      grid-template-rows:clamp(44px,10.5vw,50px) clamp(44px,10.5vw,50px) clamp(48px,12vw,56px);
+      grid-template-columns:repeat(4,clamp(44px,10vw,48px));
+      grid-template-rows:clamp(44px,10vw,48px) clamp(44px,10vw,48px) clamp(48px,11.5vw,54px);
       grid-template-areas:"i o b set" "l u e q" "j j k k";
-      gap:5px;pointer-events:none}
+      gap:clamp(10px,1.6vw,14px);pointer-events:none}
     .vpad-right .vbtn{width:100%;height:100%;pointer-events:auto;border-radius:12px;
       background:rgba(20,17,34,.7);backdrop-filter:blur(5px);box-shadow:0 4px 12px rgba(0,0,0,.35)}
     [data-vatk="0"]{grid-area:j}
@@ -442,7 +442,7 @@
     .invclose{position:fixed;left:12px;right:12px;bottom:calc(8px + env(safe-area-inset-bottom));
       z-index:90;width:auto;margin:0;padding:10px;background:#1a1424;border-color:#4a3f70;border-radius:9px}
     .gameoverlay.show .ovbtns{position:fixed;left:12px;right:12px;
-      bottom:calc(8px + env(safe-area-inset-bottom));z-index:90;display:flex;gap:8px;flex-wrap:wrap;
+      bottom:calc(8px + env(safe-area-inset-bottom));z-index:90;display:flex;gap:10px;flex-wrap:wrap;
       justify-content:stretch;margin:0;padding:8px;border-radius:10px;
       background:rgba(10,8,18,.94);border:1px solid rgba(139,108,240,.3);pointer-events:none}
     .gameoverlay.show .ovbtns button{flex:1;pointer-events:auto;font-size:13px;padding:10px 12px;min-height:46px}
@@ -1734,14 +1734,14 @@
     }
 
     /* legs + boots */
-    vLimb(-2 - stride * 0.4, -10, -3 - stride, -1.4, 2.1, P.pants, g);
-    vLimb(2 + stride * 0.4, -10, 3 + stride, -1.4, 2.1, "#1a1226", g);
+    vLimb(-2 - stride * 0.4, -9, -3 - stride, -1.4, 2.6, P.pants, g);
+    vLimb(2 + stride * 0.4, -9, 3 + stride, -1.4, 2.6, "#1a1226", g);
     var bootCol = bootsTier ? bootsInfo.color : P.boot;
-    vEll(-3 - stride, -1, 2, 1.2, bootCol, false, g);
-    vEll(3 + stride, -1, 2, 1.2, bootCol, false, g);
+    vEll(-3 - stride, -1, 2.4, 1.4, bootCol, false, g);
+    vEll(3 + stride, -1, 2.4, 1.4, bootCol, false, g);
     if (bootsTier){
-      r(g, -4.5 - stride, -3, 2, 2, bootsInfo.color);
-      r(g, 2.5 + stride, -3, 2, 2, bootsInfo.color);
+      r(g, -5.2 - stride, -3, 2.4, 2.2, bootsInfo.color);
+      r(g, 2.8 + stride, -3, 2.4, 2.2, bootsInfo.color);
       gl(g, 0, -2, 10, bootsInfo.glow, 0.45);
     }
 
@@ -1882,9 +1882,18 @@
       gl(g, 0 + lean, -19 + bob, 13, charmInfo.glow, 0.55);
     }
 
+    /* anime rim light */
+    g.beginPath();
+    g.moveTo(-4.8 + lean, -21 + bob);
+    g.quadraticCurveTo(-6.4 + lean, -17 + bob, -5.6 + lean, -13 + bob);
+    g.strokeStyle = "rgba(255,255,255,0.3)";
+    g.lineWidth = 0.9;
+    g.lineCap = "round";
+    g.stroke();
+
     /* head */
     var hx = 1 + lean * 0.8, hy = -28 + bob;
-    vEll(hx, hy, 6.1, 5.5, P.skin, true, g);
+    vEll(hx, hy, 6.7, 6.0, P.skin, true, g);
 
     /* hair base + fringe */
     if (H0.hair === "spiky"){
@@ -1912,6 +1921,15 @@
       r(g, -1, -36.5, 2, 1, "#e5d8ff");
     }
 
+    /* anime hair shine */
+    g.beginPath();
+    g.moveTo(hx - 4.8, hy - 7.0);
+    g.quadraticCurveTo(hx - 1.2, hy - 8.7, hx + 4.2, hy - 7.0);
+    g.strokeStyle = "rgba(255,255,255,0.5)";
+    g.lineWidth = 0.8;
+    g.lineCap = "round";
+    g.stroke();
+
     /* hero-specific ambient detail */
     if (H0.id === "yue"){
       gl(g, hx + 6, hy - 4, 13, "rgba(126,224,208,0.22)", 0.7);
@@ -1926,51 +1944,51 @@
 
     /* armor brow guard */
     if (armorTier >= 2){
-      r(g, -5.5, -33.2, 11, 1.5, armorInfo.color);
-      r(g, -1, -35.6, 2, 3, armorInfo.color);
+      r(g, -6, -33.4, 12, 1.5, armorInfo.color);
+      r(g, -1, -35.8, 2, 3, armorInfo.color);
     }
 
     /* eyes (with blink) */
-    var ex1 = hx - 2.4, ex2 = hx + 3.2, ey = hy + 0.6;
-    vEll(ex1, ey, 1.15, blink, "#2a1a24", false, g);
-    vEll(ex2, ey, 1.15, blink, "#2a1a24", false, g);
-    vEll(ex1, ey + 0.15, 0.72, Math.min(1.15, blink * 0.72), P.eye, false, g);
-    vEll(ex2, ey + 0.15, 0.72, Math.min(1.15, blink * 0.72), P.eye, false, g);
+    var ex1 = hx - 2.7, ex2 = hx + 3.5, ey = hy + 0.7;
+    vEll(ex1, ey, 1.3, blink, "#2a1a24", false, g);
+    vEll(ex2, ey, 1.3, blink, "#2a1a24", false, g);
+    vEll(ex1, ey + 0.15, 0.82, Math.min(1.25, blink * 0.8), P.eye, false, g);
+    vEll(ex2, ey + 0.15, 0.82, Math.min(1.25, blink * 0.8), P.eye, false, g);
     if (blink > 1){
-      vEll(ex1 - 0.3, ey - 0.5, 0.32, 0.38, "#ffffff", false, g);
-      vEll(ex2 - 0.3, ey - 0.5, 0.32, 0.38, "#ffffff", false, g);
+      vEll(ex1 - 0.35, ey - 0.55, 0.38, 0.44, "#ffffff", false, g);
+      vEll(ex2 - 0.35, ey - 0.55, 0.38, 0.44, "#ffffff", false, g);
     }
 
     /* blush + mouth */
     g.globalAlpha = 0.4;
-    vEll(hx - 4.4, hy + 2.8, 1.1, 0.55, "#ff8f9c", false, g);
-    vEll(hx + 4.4, hy + 2.8, 1.1, 0.55, "#ff8f9c", false, g);
+    vEll(hx - 4.9, hy + 3.0, 1.1, 0.55, "#ff8f9c", false, g);
+    vEll(hx + 4.9, hy + 3.0, 1.1, 0.55, "#ff8f9c", false, g);
     g.globalAlpha = 1;
     g.beginPath();
-    g.arc(hx + 0.4, hy + 3.2, 0.8, 0.15, 3.0);
+    g.arc(hx + 0.4, hy + 3.5, 0.9, 0.15, 3.0);
     g.strokeStyle = "#a5604a";
     g.lineWidth = 0.6;
     g.stroke();
 
     /* hero-specific facial details */
     if (H0.id === "ember"){
-      r(g, hx - 5.4, hy + 1.2, 2, 1, "#c25a20");
+      r(g, hx - 5.9, hy + 1.2, 2, 1, "#c25a20");
     } else if (H0.id === "yue"){
-      vEll(hx + 5.6, hy + 2.1, 0.55, 0.55, "#ffd166", false, g);
+      vEll(hx + 6.1, hy + 2.1, 0.55, 0.55, "#ffd166", false, g);
     } else {
-      r(g, hx + 4.8, hy - 1.2, 1, 2, "#c084fc");
+      r(g, hx + 5.3, hy - 1.2, 1, 2, "#c084fc");
     }
 
     /* back arm */
-    vLimb(-4 + lean, -20 + bob, -6 + lean - Math.sin(pose.arm) * 2, -13 + bob, 1.8, P.cloth2, g);
+    vLimb(-4 + lean, -20 + bob, -6 + lean - Math.sin(pose.arm) * 2, -13 + bob, 2.2, P.cloth2, g);
 
     /* front arm + weapon */
     var shx = 4 + lean, shy = -20 + bob;
     var ang = pose.arm;
     var hx2 = shx + Math.sin(ang) * 7;
     var hy2 = shy + Math.cos(ang) * 7;
-    vLimb(shx, shy, hx2, hy2, 1.8, P.cloth2, g);
-    vEll(hx2, hy2, 1.5, 1.5, P.skin, false, g);
+    vLimb(shx, shy, hx2, hy2, 2.2, P.cloth2, g);
+    vEll(hx2, hy2, 1.7, 1.7, P.skin, false, g);
 
     if (weaponTier > 1){
       gl(g, hx2, hy2 - 7, 13,
@@ -1992,12 +2010,12 @@
   function drawHero(t){
     var cx = S.x, cy = GROUND + S.y;
     ctx.globalAlpha = 0.35;
-    vEll(cx, cy - 0.5, 7, 2, "#0a0712", false);
+    vEll(cx, cy - 0.5, 8.5, 2, "#0a0712", false);
     ctx.globalAlpha = 1;
 
     ctx.save();
     ctx.translate(cx, cy);
-    ctx.scale(S.face, 1);
+    ctx.scale(S.face * 1.15, 0.94);
     drawHeroSprite(t);
     ctx.restore();
 
@@ -4933,7 +4951,7 @@
     }
     g.save();
     g.translate(cw / 2, 158 + Math.sin(t * 2.2) * 1.5);
-    g.scale(3.65, 3.65);
+    g.scale(3.65 * 1.15, 3.65 * 0.94);
     drawHeroSprite(t, {
       g:g, hero:S.hero, weapon:S.weapon, equip:S.equip, weaponTier:S.weaponTier,
       state:state, preview:true
